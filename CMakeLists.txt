@@ -1,0 +1,5 @@
+cmake_minimum_required (VERSION 2.6)
+project (jetsonTX2Power)
+add_executable(jetson_power jetson_tx2_power.cpp jetson_tx2_power_main.cpp)
+SET(GCC_MY_COMPILE_FLAGS "-Wall -O0 -g")
+SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_MY_COMPILE_FLAGS}" )
