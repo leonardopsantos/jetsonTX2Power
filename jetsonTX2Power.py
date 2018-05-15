@@ -90,10 +90,7 @@ class PowerReadingDevice(object):
 			s.update(r.to_csv())
 		return s
 
-def to_csv(csv_file):
-	create_devices()
-
-	global devices
+def to_csv(csv_file, devices, comment=''):
 
 	open_flags='w+'
 
@@ -110,27 +107,22 @@ def to_csv(csv_file):
 		d.update()
 		csv_row.update(d.to_csv())
 
+	csv_row['comments']=comment
+
 	with open(csv_file, open_flags) as csvfile:
 		writer = csv.DictWriter(csvfile, fieldnames=csv_row.keys())
 		if open_flags=='w+':
 			writer.writeheader()
 		writer.writerow(csv_row)
 
-def print_power():
-	create_devices()
 
-	global devices
+def print_power(devices):
 	for d in devices:
 		d.update()
 		print d
 
-devices = []
-
 def create_devices():
-	global devices
-
-	if len(devices) != 0:
-	    return
+	devices = []
 
 	paths= ["/sys/devices/3160000.i2c/i2c-0/0-0040/iio_device",
 		"/sys/devices/3160000.i2c/i2c-0/0-0041/iio_device",
@@ -139,16 +131,20 @@ def create_devices():
 	for p in paths:
 		devices.append(PowerReadingDevice(p))
 
+	return devices
+
 def main():
 	parser = argparse.ArgumentParser(description='Reads the Jetson TX2 voltage and current sensors')
-	parser.add_argument('-o', '--outcsv', help='File output for the CSV output')
+	parser.add_argument('-f', '--file', help='File output for the CSV output')
 
 	args = parser.parse_args()
 
-	if args.outcsv == None:
-	    print_power()
+	devices = create_devices()
+
+	if args.file == None:
+	    print_power(devices)
 	else:
-	    to_csv(args.outcsv)
+	    to_csv(args.file, devices)
 
 if __name__ == "__main__":
 	main()
