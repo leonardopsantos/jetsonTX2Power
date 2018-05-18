@@ -181,7 +181,74 @@ std::vector<PowerReadingDevice> create_devices(void)
 	return devices;
 }
 
-void to_csv(std::string csv_file, std::vector<PowerReadingDevice> &devices, std::string comment)
+void to_csv(std::string csv_file, std::vector<PowerReadingDevice> &devices,
+		std::vector<std::string> &xtra_fields_header,
+		std::vector<std::string> &xtra_fields_data)
+{
+int header = 0;
+std::ofstream outFile;
+char buf[8192];
+struct timeval now;
+time_t t;
+struct tm *tmp;
+
+	if( access( csv_file.c_str(), F_OK ) == -1 ) {
+		header = 1;
+		outFile.open(csv_file.c_str());
+	} else {
+		outFile.open(csv_file.c_str(), std::ios_base::app);
+	}
+
+	if (!outFile) {
+		return;
+	}
+
+	if( header != 0 ) {
+		outFile << "date,time,";
+
+		for (vector<PowerReadingDevice>::iterator it = devices.begin();
+				it != devices.end(); ++it) {
+			outFile << it->get_csv_header() << ",";
+		}
+		for (std::vector<std::string>::iterator it = xtra_fields_header.begin();
+				it != xtra_fields_header.end(); ++it) {
+			outFile << *it;
+			if( it != xtra_fields_header.end()-1 )
+				outFile << ",";
+		}
+	}
+
+	update_power_values(devices);
+
+	gettimeofday(&now, NULL);
+	t = now.tv_sec;
+	tmp = localtime(&t);
+
+	memset(buf, '\0', sizeof(buf));
+	strftime(buf, sizeof(buf), "%Y-%m-%d", tmp);
+	outFile << buf;
+
+	memset(buf, '\0', sizeof(buf));
+	strftime(buf, sizeof(buf), ",%H:%M:%S", tmp);
+	outFile << buf << ":" << (now.tv_usec/1000) << ",";
+
+	for (vector<PowerReadingDevice>::iterator it = devices.begin();
+			it != devices.end(); ++it) {
+		it->update();
+		outFile << it->to_csv() << ",";
+	}
+	for (std::vector<std::string>::iterator it = xtra_fields_data.begin();
+			it != xtra_fields_data.end(); ++it) {
+		outFile << *it;
+		if( it != xtra_fields_data.end()-1 )
+			outFile << ",";
+	}
+
+	outFile.close();
+}
+
+void to_csv(std::string csv_file, std::vector<PowerReadingDevice> &devices,
+		std::string comment)
 {
 int header = 0;
 std::ofstream outFile;
