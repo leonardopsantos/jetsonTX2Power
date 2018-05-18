@@ -31,9 +31,9 @@ The power rails are (gathered from the NVIDIA Jetson TX2/TX2i OEM PRODUCT DESIGN
 Location: On the TX2 module.
 
 * rail_name_0: VDD_SYS_GPU
-..* in_voltage0_input: 19136
-..* Nominal voltage: 19 V
-..* Description: Tegra GPU & SRAM, GPU supply input
+.* in_voltage0_input: 19136
+.* Nominal voltage: 19 V
+.* Description: Tegra GPU & SRAM, GPU supply input
 
 * rail_name_1: VDD_SYS_SOC
 ..* in_voltage1_input: 19144
