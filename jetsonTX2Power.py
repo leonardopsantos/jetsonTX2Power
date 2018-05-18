@@ -90,7 +90,8 @@ class PowerReadingDevice(object):
 			s.update(r.to_csv())
 		return s
 
-def to_csv(csv_file, devices, comment=''):
+
+def to_csv(csv_file, devices, comment='', xtra_fields=None):
 
 	open_flags='w+'
 
@@ -107,7 +108,10 @@ def to_csv(csv_file, devices, comment=''):
 		d.update()
 		csv_row.update(d.to_csv())
 
-	csv_row['comments']=comment
+	if xtra_fields is not None:
+		csv_row.update(xtra_fields)
+	else:
+		csv_row['comments']=comment
 
 	with open(csv_file, open_flags) as csvfile:
 		writer = csv.DictWriter(csvfile, fieldnames=csv_row.keys())
