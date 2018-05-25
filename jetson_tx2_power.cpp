@@ -194,8 +194,7 @@ std::vector<PowerReadingDevice> create_devices(void)
 }
 
 void to_csv(std::string csv_file, std::vector<PowerReadingDevice> &devices,
-        std::vector<std::string> &xtra_fields_header,
-        std::vector<std::string> &xtra_fields_data)
+        std::map<std::string,std::string> &xtra_fields)
 {
     int header = 0;
     std::ofstream outFile;
@@ -222,12 +221,13 @@ void to_csv(std::string csv_file, std::vector<PowerReadingDevice> &devices,
                 it != devices.end(); ++it) {
             outFile << it->get_csv_header() << ",";
         }
-        for (std::vector<std::string>::iterator it = xtra_fields_header.begin();
-                it != xtra_fields_header.end(); ++it) {
-            outFile << *it;
-            if (it != xtra_fields_header.end() - 1)
+        for (std::map<std::string,std::string>::iterator it = xtra_fields.begin();
+                it != xtra_fields.end();) {
+            outFile << it->first;
+            if (++it != xtra_fields.end())
                 outFile << ",";
         }
+        outFile << endl;
     }
 
     update_power_values(devices);
@@ -249,12 +249,13 @@ void to_csv(std::string csv_file, std::vector<PowerReadingDevice> &devices,
         it->update();
         outFile << it->to_csv() << ",";
     }
-    for (std::vector<std::string>::iterator it = xtra_fields_data.begin();
-            it != xtra_fields_data.end(); ++it) {
-        outFile << *it;
-        if (it != xtra_fields_data.end() - 1)
+    for (std::map<std::string,std::string>::iterator it = xtra_fields.begin();
+            it != xtra_fields.end();) {
+        outFile << it->second;
+        if (++it != xtra_fields.end())
             outFile << ",";
     }
+    outFile << endl;
 
     outFile.close();
 }

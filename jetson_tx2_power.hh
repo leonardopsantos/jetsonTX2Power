@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <map>
 
 class PowerReadingValue
 {
@@ -68,8 +69,7 @@ std::vector<PowerReadingDevice> create_devices(void);
 void to_csv(std::string csv_file, std::vector<PowerReadingDevice> &devices, std::string comment);
 void to_csv(std::string csv_file, std::vector<PowerReadingDevice> &devices);
 void to_csv(std::string csv_file, std::vector<PowerReadingDevice> &devices,
-		std::vector<std::string> &xtra_fields_header,
-		std::vector<std::string> &xtra_fields_data);
+		std::map<std::string,std::string> &xtra_fields);
 int update_power_values(std::vector<PowerReadingDevice> &devices);
 int print_values(std::vector<PowerReadingDevice> &devices);
 
