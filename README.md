@@ -2,8 +2,7 @@
 
 Reads the hardware sensors on the [Jetson TX2](https://developer.nvidia.com/embedded/buy/jetson-tx2) [embedded kit](https://www.nvidia.com/en-us/autonomous-machines/embedded-systems-dev-kits-modules/) board and either prints the values on the screen os writes a CSV file.
 
-A very useful resource is the [Jetson TX2 - INA226 (Power Monitor with i2C Interface)](https://devtalk.nvidia.com/default/topic/1000830/?offset=12#5252962) forum thread on the NVIDIA Developers forum.
-
+A very useful resource is the [Jetson TX2 - INA226 (Power Monitor with i2C Interface)](https://devtalk.nvidia.com/default/topic/1000830/?offset=12#5252962) forum thread on the NVIDIA Developers forum. [This one](https://devtalk.nvidia.com/default/topic/1032940/jetson-tx2/soc-voltage/post/5255540/#5255540) also has some useful information
 
 ## Power Rails on the TX2
 
@@ -38,7 +37,7 @@ Location: On the TX2 module.
 * rail_name_1: VDD_SYS_SOC
   * in_voltage1_input: 19144
   * Nominal voltage: 19 V
-  * Description: VDD_SYS_SOC_IN, SOC supply input.
+  * Description: VDD_SYS_SOC_IN, SOC supply input. Powers the display adapter, ISP, NVDEC, NVENC, VIC [*](https://devtalk.nvidia.com/default/topic/1032940/jetson-tx2/soc-voltage/post/5255540/#5255540)
 
 * rail_name_2: VDD_4V0_WIFI
   * in_voltage2_input: 4784
@@ -51,7 +50,7 @@ Location: on the TX2 module.
 * rail_name_0: VDD_IN
   * in_voltage0_input: 19144
   * Nominal voltage: 19 V
-  * Description: VDD_IN Supply Monitor. It seems it DOES NOT power the VDD_SYS_CPU and VDD_SYS_GPU.
+  * Description: VDD_IN Supply Monitor. It powers all other rails (VDD_SYS_CPU, VDD_SYS_DDR, VDD_SYS_GPU, VDD_SYS_SOC, VDD_4V0_WIFI) [according to this post](https://devtalk.nvidia.com/default/topic/1000830/jetson-tx2/jetson-tx2-ina226-power-monitor-with-i2c-interface-/post/5262601/#5262601).
 
 * rail_name_1: VDD_SYS_CPU
   * in_voltage1_input: 19128
